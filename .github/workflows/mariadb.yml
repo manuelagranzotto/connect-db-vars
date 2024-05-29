@@ -1,0 +1,20 @@
+on:
+  workflow_call:
+    inputs:
+      config-path:
+        required: true
+        type: string
+      repo-token: 
+        type: string
+    secrets:
+      SSH_SECRET_KEY:
+        required: true
+ 
+ 
+jobs:
+  run-sql:
+    runs-on: ubuntu-latest
+    steps: 
+      - run: echo ${{ inputs.config-path }} 
+      - run: echo ${{ inputs.sql-command }} 
+      - run: echo ${{ secrets.SSH_SECRET_KEY }}
