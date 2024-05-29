@@ -1,0 +1,70 @@
+name: Request input information
+ 
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  #push:
+  #  branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
+ 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      mensagem:
+        type: string
+        description: Coloque aqui a mensagem
+        required: true
+      sql-command:
+        type: string
+        description: Coloque aqui SQL a ser executado
+        required: true
+      ambiente:
+        type: environment
+      nuvem:
+        type: choice
+        description: Escolha o SGBD para deploy
+        options:
+        - SqlServer
+        - Oracle
+        - Postgres
+        - MariaDB
+      agreement:
+        type: boolean
+        description: Concorda com os termos
+
+ 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  teste-postgres-sql:
+    if: ${{ github.event.inputs.nuvem == 'Postgres' }} 
+    uses: ./.github/workflows/postgres.yml
+    with:
+      config-path: "Postgres"
+      repo-token: "hello"
+    secrets:
+      SSH_SECRET_KEY: ${{ secrets.SSH_SECRET_KEY }}
+  teste-oracle-sql:
+    if: ${{ github.event.inputs.nuvem == 'Oracle' }} 
+    uses: ./.github/workflows/oracle.yml
+    with:
+      config-path: "Oracle"
+      repo-token: "hello"
+    secrets:
+      SSH_SECRET_KEY: ${{ secrets.SSH_SECRET_KEY }}
+  teste-sqlserver:
+    if: ${{ github.event.inputs.nuvem == 'SqlServer' }} 
+    uses: ./.github/workflows/sqlserver.yml
+    with:
+      config-path: "Oracle"
+      repo-token: "hello"
+    secrets:
+      SSH_SECRET_KEY: ${{ secrets.SSH_SECRET_KEY }}
+  teste-mariadb:
+    if: ${{ github.event.inputs.nuvem == 'MariaDB' }} 
+    uses: ./.github/workflows/mariadb.yml
+    with:
+      config-path: "Oracle"
+      repo-token: "hello"
+    secrets:
+      SSH_SECRET_KEY: ${{ secrets.SSH_SECRET_KEY }}
